@@ -5,19 +5,24 @@ namespace App\Controller;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Twig\Environment;
 
 class QuestionController extends abstractController
 {
     /**
-     * @Route("/")
+     * @Route("/",name="app_homepage")
      */
-    public function homepage()
+    public function homepage(Environment $twigEnv)
     {
-        return new Response('What a bewitching controller we have conjured!');
+        //return $this->render('question/homepage.html.twig');
+
+        // example of using twig service directly
+        $html = $twigEnv->render('question/homepage.html.twig');
+        return new Response($html);
     }
 
     /**
-     * @Route("/questions/{slug}")
+     * @Route("/questions/{slug}",name="app_question_show")
      */
     public function show($slug)
     {
@@ -26,6 +31,8 @@ class QuestionController extends abstractController
             'Honestly, I like furry shoes better than MY cat',
             'Maybe... try saying the spell backwards?',
         ];
+
+        dump($this);
 
         return $this->render('question/show.html.twig',[
             'question'=>ucwords(str_replace('-', ' ', $slug)),
